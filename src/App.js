@@ -11,7 +11,7 @@ class App extends React.Component {
       dogArray: [],
     };
 
-    // this.fetchDog = this.fetchDog.bind(this);
+    this.fetchDog = this.fetchDog.bind(this);
     this.saveDog = this.saveDog.bind(this);
     this.renderDogElement = this.renderDogElement.bind(this);
   }
