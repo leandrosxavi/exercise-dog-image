@@ -1,68 +1,33 @@
-import React from 'react';
-import './App.css';
+import React from "react";
 
 class App extends React.Component {
   constructor(props) {
     super(props);
-
     this.state = {
-      loading: true,
-      dogObj: undefined,
-      dogArray: [],
+      data: ""
     };
-
     this.fetchDog = this.fetchDog.bind(this);
-    this.saveDog = this.saveDog.bind(this);
-    this.renderDogElement = this.renderDogElement.bind(this);
   }
 
   componentDidMount() {
     this.fetchDog();
   }
 
-  async fetchDog() {
-    this.setState({ loading: true }, async () => {
-      const dogRequest = await fetch('https://dog.ceo/api/breeds/image/random');
-      const dogData = await dogRequest.json();
-      this.setState({
-        dogObj: dogData,
-        loading: false,
-      });
-    });
-  }
-
-  saveDog() {
-    this.setState(({ dogObj, dogArray }) => ({
-      dogArray: [...dogArray, dogObj],
-    }));
-
-    this.fetchDog();
-  }
-
-  renderDogElement() {
-    const { dogObj } = this.state;
-    return (
-      <div>
-        <img src={ dogObj.message } alt="Dog" />
-        <input
-          type="button"
-          value="Gerar doguinho"
-          onClick={ this.saveDog }
-        />
-      </div>
-    );
+  fetchDog() {
+    fetch("https://dog.ceo/api/breeds/image/random")
+      .then(res => res.json())
+      .then(result => this.setState({ data: result }));
   }
 
   render() {
-    const { loading, dogArray } = this.state;
-
+    if (this.state.data === "") return "loading...";
     return (
-      <div className="App">
-        <span>
-          { dogArray.map((dog, id) => <img key={ id } src={ dog.message } alt="Dog" />) }
-        </span>
-
-        { loading ? <span>Loading...</span> : this.renderDogElement() }
+      <div>
+        <p>Doguinhos</p>
+        <button onClick={this.fetchDog}>Novo doguinho!</button>
+        <div>
+          <img src={this.state.data.message} alt="Random dog" />
+        </div>
       </div>
     );
   }
